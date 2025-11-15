@@ -22,11 +22,13 @@ export const renderSidebar = async (container) => {
     try {
         const response = await fetch('/api/user/permissions');
         if (!response.ok) {
+            console.error('Failed to fetch permissions:', response.status, response.statusText);
             // If permissions fail, redirect to login as a security measure
             window.location.href = '/';
             return;
         }
         const permissions = await response.json();
+        console.log('Fetched permissions:', permissions);
         const currentPath = window.location.pathname;
 
         const sidebarHTML = `
@@ -39,12 +41,12 @@ export const renderSidebar = async (container) => {
                 </div>
                 <div class="flex-1 overflow-y-auto p-4">
                     <nav class="space-y-2">
-                        ${permissions.map(p => `
+                        ${permissions.length > 0 ? permissions.map(p => `
                             <a href="${p.Link}" class="flex items-center px-4 py-2.5 text-gray-200 transition-colors duration-200 rounded-lg hover:bg-primary-focus/50 ${currentPath === p.Link ? 'bg-primary-focus font-semibold' : ''}">
                                 ${iconMap[p.Icon] || ''}
                                 <span class="mx-4">${p.PermissionName}</span>
                             </a>
-                        `).join('')}
+                        `).join('') : '<div class="text-gray-400 text-center p-4">No hay permisos asignados. Por favor contacta al administrador.</div>'}
                     </nav>
                 </div>
             </div>
