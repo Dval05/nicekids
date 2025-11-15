@@ -1,0 +1,17 @@
+{
+  "name": "nicekids-nodejs-mpa",
+  "version": "1.0.0",
+  "description": "NiceKids Early Childhood Education Management System",
+  "main": "server.js",
+  "type": "module",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js"
+  },
+  "dependencies": {
+    "@google/genai": "^0.14.0",
+    "@supabase/supabase-js": "^2.43.4",
+    "cookie-parser": "^1.4.6",
+    "express": "^4.19.2"
+  }
+}

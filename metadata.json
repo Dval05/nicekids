@@ -1,0 +1,5 @@
+{
+  "name": "NiceKids - Early Childhood Education Management",
+  "description": "A comprehensive system to streamline administrative tasks, track attendance, and manage student information for the NiceKids early childhood education center. Built with React, TypeScript, and Supabase.",
+  "requestFramePermissions": []
+}

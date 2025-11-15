@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NiceKids - Calendario</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              'primary': '#42c3be',
+              'primary-focus': '#38a8a4',
+              'primary-content': '#ffffff',
+              'neutral': '#1F2937',
+              'base-100': '#faf8fa',
+              'base-200': '#F3F4F6',
+              'error': '#DC2626',
+            },
+          },
+        },
+      }
+    </script>
+</head>
+<body class="bg-base-200">
+    <div class="flex h-screen bg-gray-100">
+        <!-- Sidebar container -->
+        <div id="sidebar-container"></div>
+
+        <!-- Content -->
+        <div class="flex-1 flex flex-col overflow-hidden">
+            <!-- Header container -->
+            <header id="header-container"></header>
+
+            <!-- Main content -->
+            <main class="flex-1 overflow-x-hidden overflow-y-auto bg-base-100 p-6">
+                 <div class="flex flex-col md:flex-row justify-between md:items-center mb-6 gap-4">
+                    <h1 class="text-3xl font-bold text-gray-800">Calendario de Actividades</h1>
+                    <button id="add-activity-button" class="bg-primary text-white px-4 py-2 rounded-lg shadow hover:bg-primary-focus transition-colors">
+                        Crear Actividad
+                    </button>
+                </div>
+                
+                <div class="bg-white shadow-md rounded-lg p-6">
+                    <div class="flex flex-col sm:flex-row justify-between items-center mb-4 gap-4">
+                        <div class="flex items-center gap-2">
+                           <button id="today-btn" class="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50">Hoy</button>
+                           <button id="prev-btn" class="p-2 rounded-full hover:bg-gray-100 text-gray-600">&lt;</button>
+                           <h2 id="current-view-title" class="text-xl font-semibold text-gray-700 text-center w-48"></h2>
+                           <button id="next-btn" class="p-2 rounded-full hover:bg-gray-100 text-gray-600">&gt;</button>
+                        </div>
+                        <div class="flex items-center border border-gray-300 rounded-md">
+                            <button id="month-view-btn" class="px-3 py-1 text-sm rounded-l-md">Mes</button>
+                            <button id="week-view-btn" class="px-3 py-1 text-sm border-l border-r">Semana</button>
+                            <button id="day-view-btn" class="px-3 py-1 text-sm rounded-r-md">Día</button>
+                        </div>
+                    </div>
+                    <div id="calendar-container" class="overflow-x-auto">
+                        <!-- Calendar will be injected here -->
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+    
+    <!-- Modal -->
+    <div id="activity-modal" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex justify-center items-center">
+        <div class="bg-white rounded-lg shadow-xl w-full max-w-3xl mx-4">
+            <div class="p-4 border-b flex justify-between items-center">
+              <h3 id="modal-title" class="text-lg font-semibold text-gray-800"></h3>
+              <button id="close-modal-button" class="text-gray-400 hover:text-gray-600">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
+              </button>
+            </div>
+            <div class="p-6 max-h-[80vh] overflow-y-auto">
+                <form id="activity-form" class="space-y-4">
+                    <input type="hidden" id="activity-id" name="ActivityID">
+                    <div id="form-error" class="hidden bg-red-100 border-red-400 text-red-700 px-4 py-3 rounded" role="alert"></div>
+                    <div>
+                        <label for="Name" class="block text-sm font-medium text-gray-700">Nombre de la Actividad</label>
+                        <input type="text" name="Name" id="Name" required class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm">
+                    </div>
+                    <div>
+                        <label for="Description" class="block text-sm font-medium text-gray-700">Descripción</label>
+                        <textarea name="Description" id="Description" rows="3" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm"></textarea>
+                    </div>
+                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label for="GradeID" class="block text-sm font-medium text-gray-700">Grado (Opcional)</label>
+                            <select name="GradeID" id="GradeID" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm"></select>
+                        </div>
+                        <div>
+                            <label for="EmpID" class="block text-sm font-medium text-gray-700">Responsable</label>
+                            <select name="EmpID" id="EmpID" required class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm"></select>
+                        </div>
+                     </div>
+                     <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                         <div>
+                            <label for="ScheduledDate" class="block text-sm font-medium text-gray-700">Fecha</label>
+                            <input type="date" name="ScheduledDate" id="ScheduledDate" required class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm">
+                        </div>
+                        <div>
+                            <label for="StartTime" class="block text-sm font-medium text-gray-700">Hora Inicio</label>
+                            <input type="time" name="StartTime" id="StartTime" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm">
+                        </div>
+                        <div>
+                            <label for="EndTime" class="block text-sm font-medium text-gray-700">Hora Fin</label>
+                            <input type="time" name="EndTime" id="EndTime" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm">
+                        </div>
+                     </div>
+                      <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div>
+                           <label for="Location" class="block text-sm font-medium text-gray-700">Ubicación</label>
+                           <input type="text" name="Location" id="Location" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm">
+                        </div>
+                        <div>
+                           <label for="Category" class="block text-sm font-medium text-gray-700">Categoría</label>
+                           <input type="text" name="Category" id="Category" placeholder="Ej: Arte, Deporte" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm">
+                        </div>
+                        <div>
+                           <label for="Status" class="block text-sm font-medium text-gray-700">Estado</label>
+                           <select name="Status" id="Status" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm">
+                                <option value="Planned">Planeado</option>
+                                <option value="Ongoing">En Curso</option>
+                                <option value="Completed">Completado</option>
+                                <option value="Cancelled">Cancelado</option>
+                           </select>
+                        </div>
+                     </div>
+                    
+                    <div id="multimedia-section" class="pt-4 border-t hidden">
+                        <h4 class="text-md font-medium text-gray-700 mb-2">Archivos Multimedia</h4>
+                        <div id="media-gallery" class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-4"></div>
+                        <label for="media-upload" class="cursor-pointer bg-gray-100 hover:bg-gray-200 text-gray-700 font-semibold py-2 px-4 rounded-md inline-flex items-center text-sm">
+                            <svg class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20"><path d="M16.88 9.1A4 4 0 0 1 16 17H5a5 5 0 0 1 0-10 3.5 3.5 0 0 1 6.36-2.32 4 4 0 0 1 4.52 4.42zM11 11V5a1 1 0 1 1 2 0v6h3l-4 4-4-4h3z"></path></svg>
+                            <span>Añadir Archivo</span>
+                        </label>
+                        <input type="file" id="media-upload" class="hidden">
+                         <div id="upload-progress" class="hidden mt-2 text-sm text-gray-600">Subiendo...</div>
+                    </div>
+
+                    <div class="flex justify-between items-center pt-4">
+                        <button type="button" id="delete-button" class="hidden text-white bg-error hover:bg-red-700 px-4 py-2 rounded-md text-sm">Eliminar Actividad</button>
+                        <div class="space-x-3">
+                            <button type="button" id="cancel-button" class="bg-white py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 hover:bg-gray-50">Cancelar</button>
+                            <button type="submit" id="save-button" class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-primary hover:bg-primary-focus">Guardar</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+    <script type="module" src="/js/app.js"></script>
+    <script src="/js/calendar.js"></script>
+</body>
+</html>

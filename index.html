@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>NiceKids Management - Iniciar Sesión</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              'primary': '#42c3be',
+              'primary-focus': '#38a8a4',
+              'primary-content': '#ffffff',
+              'secondary': '#f426b9',
+              'secondary-focus': '#d61f9f',
+              'accent': '#a1d42a',
+              'warning': '#f3cf2a',
+              'neutral': '#1F2937',
+              'base-100': '#faf8fa',
+              'base-200': '#F3F4F6',
+              'base-300': '#E5E7EB',
+              'info': '#3B82F6',
+              'success': '#16A34A',
+              'error': '#DC2626',
+            },
+          },
+        },
+      }
+    </script>
+<script type="importmap">
+{
+  "imports": {
+    "react-router-dom": "https://aistudiocdn.com/react-router-dom@^7.9.6",
+    "react/": "https://aistudiocdn.com/react@^19.2.0/",
+    "react": "https://aistudiocdn.com/react@^19.2.0",
+    "@supabase/supabase-js": "https://aistudiocdn.com/@supabase/supabase-js@^2.81.1",
+    "express": "https://aistudiocdn.com/express@^5.1.0",
+    "url": "https://aistudiocdn.com/url@^0.11.4",
+    "path": "https://aistudiocdn.com/path@^0.12.7",
+    "cookie-parser": "https://aistudiocdn.com/cookie-parser@^1.4.7",
+    "@google/genai": "https://aistudiocdn.com/@google/genai@^1.29.1"
+  }
+}
+</script>
+</head>
+<body class="bg-base-200">
+    <div class="flex items-center justify-center min-h-screen">
+      <div class="w-full max-w-md p-8 space-y-8 bg-white rounded-2xl shadow-lg">
+        <div class="text-center">
+            <div class="flex items-center justify-center mb-4">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 text-primary" viewBox="0 0 20 20" fill="currentColor">
+                  <path d="M10 3.5a1.5 1.5 0 013 0V4a1 1 0 001 1h3a1 1 M0 011 1v3a1 1 0 01-1 1h-.5a1.5 1.5 0 000 3h.5a1 1 0 011 1v3a1 1 0 01-1 1h-3a1 1 0 00-1 1v.5a1.5 1.5 0 01-3 0v-.5a1 1 0 00-1-1H6a1 1 0 01-1-1v-3a1 1 0 011-1h.5a1.5 1.5 0 000-3H6a1 1 0 01-1-1V6a1 1 0 011-1h3a1 1 0 001-1v-.5z" />
+                </svg>
+                <h1 class="ml-3 text-3xl font-bold text-gray-800">NiceKids</h1>
+            </div>
+          <h2 class="mt-2 text-xl font-semibold text-gray-600">
+            Bienvenido de vuelta
+          </h2>
+          <p class="text-sm text-gray-500">Inicia sesión para continuar</p>
+        </div>
+        
+        <div id="error-message" class="hidden bg-red-100 border-l-4 border-red-500 text-red-700 p-4" role="alert"></div>
+        
+        <form id="login-form" class="mt-8 space-y-6">
+          <div class="rounded-md shadow-sm -space-y-px">
+            <div>
+              <label for="identifier" class="sr-only">Usuario o Correo Electrónico</label>
+              <input
+                id="identifier"
+                name="identifier"
+                type="text"
+                autocomplete="username"
+                required
+                class="appearance-none rounded-none relative block w-full px-3 py-3 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-primary focus:border-primary focus:z-10 sm:text-sm"
+                placeholder="Usuario o Correo Electrónico"
+              />
+            </div>
+            <div>
+              <label for="password" class="sr-only">Contraseña</label>
+              <input
+                id="password"
+                name="password"
+                type="password"
+                autocomplete="current-password"
+                required
+                class="appearance-none rounded-none relative block w-full px-3 py-3 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-primary focus:border-primary focus:z-10 sm:text-sm"
+                placeholder="Contraseña"
+              />
+            </div>
+          </div>
+          <div class="flex items-center justify-end">
+            <div class="text-sm">
+                <a href="/forgot-password" class="font-medium text-primary hover:text-primary-focus">
+                ¿Olvidaste tu contraseña?
+                </a>
+            </div>
+          </div>
+          <div>
+            <button
+              type="submit"
+              id="login-button"
+              class="group relative w-full flex justify-center py-3 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-primary hover:bg-primary-focus focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary disabled:opacity-50"
+            >
+              Iniciar Sesión
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+    <script src="/js/auth.js"></script>
+</body>
+</html>

@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NiceKids - Nómina</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              'primary': '#42c3be',
+              'primary-focus': '#38a8a4',
+              'primary-content': '#ffffff',
+              'neutral': '#1F2937',
+              'base-100': '#faf8fa',
+              'base-200': '#F3F4F6',
+              'error': '#DC2626',
+            },
+          },
+        },
+      }
+    </script>
+</head>
+<body class="bg-base-200">
+    <div class="flex h-screen bg-gray-100">
+        <!-- Sidebar container -->
+        <div id="sidebar-container"></div>
+
+        <!-- Content -->
+        <div class="flex-1 flex flex-col overflow-hidden">
+            <!-- Header container -->
+            <header id="header-container"></header>
+
+            <!-- Main content -->
+            <main class="flex-1 overflow-x-hidden overflow-y-auto bg-base-100 p-6">
+                <div class="flex justify-between items-center mb-6">
+                    <h1 class="text-3xl font-bold text-gray-800">Nómina de Empleados</h1>
+                    <button id="add-payment-button" class="bg-primary text-white px-4 py-2 rounded-lg shadow hover:bg-primary-focus transition-colors">
+                        Registrar Pago
+                    </button>
+                </div>
+
+                <div id="table-container" class="bg-white shadow-md rounded-lg overflow-hidden">
+                    <!-- Table will be injected here by JavaScript -->
+                </div>
+
+                <div id="pagination-container" class="mt-4 flex justify-between items-center">
+                    <!-- Pagination controls will be injected here -->
+                </div>
+            </main>
+        </div>
+    </div>
+    
+    <!-- Modal -->
+    <div id="payment-modal" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex justify-center items-center">
+        <div class="bg-white rounded-lg shadow-xl w-full max-w-3xl mx-4">
+            <div class="p-4 border-b flex justify-between items-center">
+              <h3 id="modal-title" class="text-lg font-semibold text-gray-800"></h3>
+              <button id="close-modal-button" class="text-gray-400 hover:text-gray-600">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
+              </button>
+            </div>
+            <div class="p-6 max-h-[80vh] overflow-y-auto">
+                <form id="payment-form" class="space-y-4">
+                    <input type="hidden" id="payment-id" name="TeacherPaymentID">
+                    <div id="form-error" class="hidden bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded" role="alert"></div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label for="EmpID" class="block text-sm font-medium text-gray-700">Empleado</label>
+                            <select name="EmpID" id="EmpID" required class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm"></select>
+                        </div>
+                        <div>
+                            <label for="PaymentDate" class="block text-sm font-medium text-gray-700">Fecha de Pago</label>
+                            <input type="date" name="PaymentDate" id="PaymentDate" required class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm">
+                        </div>
+                    </div>
+                     <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div>
+                           <label for="PaymentPeriod" class="block text-sm font-medium text-gray-700">Periodo (Ej: Enero 2024)</label>
+                           <input type="text" name="PaymentPeriod" id="PaymentPeriod" required class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm">
+                        </div>
+                        <div>
+                           <label for="PeriodStartDate" class="block text-sm font-medium text-gray-700">Inicio Periodo</label>
+                           <input type="date" name="PeriodStartDate" id="PeriodStartDate" required class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm">
+                        </div>
+                        <div>
+                           <label for="PeriodEndDate" class="block text-sm font-medium text-gray-700">Fin Periodo</label>
+                           <input type="date" name="PeriodEndDate" id="PeriodEndDate" required class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm">
+                        </div>
+                     </div>
+                     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                        <div>
+                           <label for="BaseSalary" class="block text-sm font-medium text-gray-700">Salario Base</label>
+                           <input type="number" step="0.01" name="BaseSalary" id="BaseSalary" required class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm">
+                        </div>
+                         <div>
+                           <label for="Bonuses" class="block text-sm font-medium text-gray-700">Bonos</label>
+                           <input type="number" step="0.01" name="Bonuses" id="Bonuses" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm">
+                        </div>
+                         <div>
+                           <label for="Deductions" class="block text-sm font-medium text-gray-700">Deducciones</label>
+                           <input type="number" step="0.01" name="Deductions" id="Deductions" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm">
+                        </div>
+                         <div>
+                           <label for="TotalAmount" class="block text-sm font-medium text-gray-700">Monto Total</label>
+                           <input type="number" step="0.01" name="TotalAmount" id="TotalAmount" required class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm bg-gray-100" readonly>
+                        </div>
+                     </div>
+                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label for="Status" class="block text-sm font-medium text-gray-700">Estado</label>
+                            <select name="Status" id="Status" required class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm">
+                                <option value="Pending">Pendiente</option>
+                                <option value="Processing">Procesando</option>
+                                <option value="Paid">Pagado</option>
+                            </select>
+                        </div>
+                         <div>
+                            <label for="PaymentMethod" class="block text-sm font-medium text-gray-700">Método de Pago</label>
+                            <select name="PaymentMethod" id="PaymentMethod" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm">
+                                <option value="Transfer">Transferencia</option>
+                                <option value="Check">Cheque</option>
+                                <option value="Cash">Efectivo</option>
+                                <option value="Other">Otro</option>
+                            </select>
+                        </div>
+                     </div>
+                    <div class="flex justify-end space-x-3 pt-4">
+                        <button type="button" id="cancel-button" class="bg-white py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 hover:bg-gray-50">Cancelar</button>
+                        <button type="submit" id="save-button" class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-primary hover:bg-primary-focus">Guardar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+    <script type="module" src="/js/app.js"></script>
+    <script src="/js/payroll.js"></script>
+</body>
+</html>

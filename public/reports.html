@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NiceKids - Reportes</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              'primary': '#42c3be',
+              'primary-focus': '#38a8a4',
+              'primary-content': '#ffffff',
+              'neutral': '#1F2937',
+              'base-100': '#faf8fa',
+              'base-200': '#F3F4F6',
+              'error': '#DC2626',
+            },
+          },
+        },
+      }
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.23/jspdf.plugin.autotable.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+</head>
+<body class="bg-base-200">
+    <div class="flex h-screen bg-gray-100">
+        <!-- Sidebar container -->
+        <div id="sidebar-container"></div>
+
+        <!-- Content -->
+        <div class="flex-1 flex flex-col overflow-hidden">
+            <!-- Header container -->
+            <header id="header-container"></header>
+
+            <!-- Main content -->
+            <main class="flex-1 overflow-x-hidden overflow-y-auto bg-base-100 p-6">
+                <h1 class="text-3xl font-bold text-gray-800 mb-6">Generador de Reportes</h1>
+                
+                <div class="bg-white p-6 rounded-lg shadow-md mb-6">
+                    <form id="report-form" class="grid grid-cols-1 md:grid-cols-4 gap-4 items-end">
+                        <div>
+                            <label for="report-type" class="block text-sm font-medium text-gray-700">Tipo de Reporte</label>
+                            <select id="report-type" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-primary focus:border-primary sm:text-sm">
+                                <option value="student_attendance">Asistencia de Estudiantes</option>
+                                <option value="employee_attendance">Asistencia de Empleados</option>
+                                <option value="student_performance">Desempeño de Estudiantes</option>
+                                <option value="student_payments">Pagos de Estudiantes</option>
+                                <option value="teacher_payments">Pagos a Docentes</option>
+                                <option value="ai_financial_analysis">Análisis Financiero con IA</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label for="start-date" class="block text-sm font-medium text-gray-700">Fecha de Inicio</label>
+                            <input type="date" id="start-date" required class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-primary focus:border-primary sm:text-sm">
+                        </div>
+                        <div>
+                            <label for="end-date" class="block text-sm font-medium text-gray-700">Fecha de Fin</label>
+                            <input type="date" id="end-date" required class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-primary focus:border-primary sm:text-sm">
+                        </div>
+                        <button type="submit" id="generate-report-btn" class="w-full bg-primary text-white px-4 py-2 rounded-lg shadow hover:bg-primary-focus transition-colors">
+                            Generar Reporte
+                        </button>
+                    </form>
+                </div>
+
+                <div id="report-actions" class="hidden flex justify-end items-center mb-4 gap-2">
+                     <button id="export-pdf" class="bg-red-500 text-white px-4 py-2 rounded-md text-sm hover:bg-red-600">Exportar PDF</button>
+                     <button id="export-excel" class="bg-green-500 text-white px-4 py-2 rounded-md text-sm hover:bg-green-600">Exportar Excel</button>
+                </div>
+
+                <div id="report-results-container">
+                    <div id="report-results" class="bg-white shadow-md rounded-lg overflow-hidden">
+                        <p class="p-6 text-center text-gray-500">Seleccione los parámetros y genere un reporte para ver los resultados.</p>
+                    </div>
+                     <div id="pagination-container" class="mt-4 flex justify-between items-center">
+                        <!-- Pagination controls will be injected here -->
+                    </div>
+                </div>
+
+                <div id="ai-analysis-container" class="hidden">
+                     <div id="ai-analysis-result" class="bg-white shadow-md rounded-lg p-6 prose max-w-none">
+                        <!-- AI analysis will be injected here -->
+                    </div>
+                </div>
+
+            </main>
+        </div>
+    </div>
+    
+    <script type="module" src="/js/app.js"></script>
+    <script src="/js/reports.js"></script>
+</body>
+</html>

@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NiceKids - Panel</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              'primary': '#42c3be',
+              'primary-focus': '#38a8a4',
+              'primary-content': '#ffffff',
+              'neutral': '#1F2937',
+              'base-100': '#faf8fa',
+              'base-200': '#F3F4F6',
+            },
+          },
+        },
+      }
+    </script>
+</head>
+<body class="bg-base-200">
+    <div class="flex h-screen bg-gray-100">
+        <!-- Sidebar container -->
+        <div id="sidebar-container"></div>
+
+        <!-- Content -->
+        <div class="flex-1 flex flex-col overflow-hidden">
+            <!-- Header container -->
+            <header id="header-container"></header>
+
+            <!-- Main content -->
+            <main class="flex-1 overflow-x-hidden overflow-y-auto bg-base-100 p-6">
+                <h1 class="text-3xl font-bold text-gray-800 mb-6">Panel de Control</h1>
+                <h2 class="text-xl">¡Bienvenido al sistema de gestión de NiceKids!</h2>
+                <p class="text-gray-600 mt-2">Más módulos y funcionalidades se añadirán aquí.</p>
+            </main>
+        </div>
+    </div>
+    <script type="module" src="/js/app.js"></script>
+</body>
+</html>
