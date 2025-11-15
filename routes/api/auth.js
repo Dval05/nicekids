@@ -39,10 +39,15 @@ router.post('/login', async (req, res) => {
   if (data.session && data.user) {
     // Update AuthUserID in public.user table to ensure link between auth.users and public.user
     // This is crucial for the auth middleware to work correctly
-    await supabase
+    const { error: updateError } = await supabase
       .from('user')
       .update({ AuthUserID: data.user.id })
       .eq('Email', emailToLogin);
+    
+    if (updateError) {
+      console.error('Warning: Failed to update AuthUserID:', updateError.message);
+      // Don't fail the login, but log the error for investigation
+    }
     
     // last_sign_in_at is null on the very first sign-in.
     // The user object from signInWithPassword already contains this information.
