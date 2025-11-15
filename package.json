@@ -7,6 +7,7 @@
   "scripts": {
     "start": "node server.js",
     "dev": "node --watch server.js",
+    "build": "npm run build:css",
     "build:css": "tailwindcss -i ./src/styles.css -o ./public/css/styles.css --minify",
     "watch:css": "tailwindcss -i ./src/styles.css -o ./public/css/styles.css --watch"
   },
