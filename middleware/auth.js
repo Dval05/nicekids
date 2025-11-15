@@ -1,21 +1,32 @@
 // Middleware to get user profile and roles
 const getProfileAndRoles = async (supabase, user) => {
+    // Corrected Query: First, get the user profile and their roles.
     const { data: userData, error: userError } = await supabase
         .from('user')
-        .select('*, user_role(*, role(*)), employee(EmpID)')
+        .select('*, user_role(*, role(*))') // Select user data and their roles
         .eq('AuthUserID', user.id)
         .single();
 
+    // If the basic profile isn't found, we can't proceed.
     if (userError || !userData) {
+        console.error('Error fetching user profile or profile not found:', userError?.message);
         return null;
     }
+
+    // Now, optionally try to get the employee ID if there's a link.
+    const { data: employeeData, error: employeeError } = await supabase
+        .from('employee')
+        .select('EmpID')
+        .eq('UserID', userData.UserID)
+        .single();
+
+    // If there's an error fetching the employee (other than not found), log it but don't fail.
+    if (employeeError && employeeError.code !== 'PGRST116') { // PGRST116 is "Not found"
+        console.warn('Could not fetch employee link for user:', employeeError.message);
+    }
     
-    // Assuming a user has one primary role for simplicity
     const role = userData.user_role[0]?.role?.RoleName || null;
-    const empId = userData.employee[0]?.EmpID || null;
-    
-    // Remove the nested employee array for a cleaner profile object
-    delete userData.employee;
+    const empId = employeeData?.EmpID || null;
 
     return { ...userData, role, empId };
 };
@@ -38,6 +49,7 @@ export const authMiddleware = async (req, res, next) => {
   const userProfile = await getProfileAndRoles(req.supabase, user);
   if (!userProfile) {
     res.clearCookie('nicekids-auth');
+    // Send a more informative error and redirect on the client side if needed
     return res.status(403).send('User profile not found in database.');
   }
 
