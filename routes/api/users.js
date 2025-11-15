@@ -19,7 +19,15 @@ router.get('/permissions', authMiddleware, async (req, res) => {
     console.log('User Profile:', JSON.stringify(req.userProfile, null, 2));
     console.log('User Role Array:', req.userProfile.user_role);
     
-    const roleId = req.userProfile.user_role[0]?.RoleID;
+    // Try to get RoleID from the user_role array
+    // The user_role table has a RoleID foreign key column
+    let roleId = req.userProfile.user_role?.[0]?.RoleID;
+    
+    // Fallback: if not found, try to get from nested role object
+    if (!roleId && req.userProfile.user_role?.[0]?.role?.RoleID) {
+        roleId = req.userProfile.user_role[0].role.RoleID;
+    }
+    
     console.log('Role ID:', roleId);
     
     if (!roleId) {
