@@ -12,6 +12,8 @@ const getProfileAndRoles = async (supabase, user) => {
         console.error('Error fetching user profile or profile not found:', userError?.message);
         return null;
     }
+    
+    console.log('Fetched user data:', JSON.stringify(userData, null, 2));
 
     // Now, optionally try to get the employee ID if there's a link.
     const { data: employeeData, error: employeeError } = await supabase
